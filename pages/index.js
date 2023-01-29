@@ -2,7 +2,17 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 
-export default function Home() {
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const res = await fetch(`https://catfact.ninja/fact`)
+  const data = await res.json()
+  console.log(data)
+
+  // Pass data to the page via props
+  return { props: { data } }
+}
+
+export default function Home({ data }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -12,7 +22,7 @@ export default function Home() {
 
       <main>
         <h1 className={styles.title}>
-          Read <Link href="/posts/first-post">this page!</Link>
+          { data.fact }
         </h1>
 
         <p className={styles.description}>
